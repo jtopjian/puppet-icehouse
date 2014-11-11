@@ -90,4 +90,13 @@ class icehouse::profiles::controller::keystone {
     tag          => $region,
   }
 
+  cubbystack::functions::create_keystone_endpoint { "${region}/database":
+    public_url   => "http://${external_address}:8779/v1.0/%(tenant_id)s",
+    admin_url    => "http://${external_address}:8779/v1.0/%(tenant_id)s",
+    internal_url => "http://${internal_address}:8779/v1.0/%(tenant_id)s",
+    service_name => 'OpenStack Database Service',
+    tag          => $region,
+  }
+
+
 }

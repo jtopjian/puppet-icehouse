@@ -59,4 +59,11 @@ class icehouse::profiles::controller::mysql {
     allowed_hosts => $allowed_hosts,
   }
 
+  cubbystack::functions::create_mysql_db { 'trove':
+    user          => 'trove',
+    password      => hiera('openstack::trove::mysql::password'),
+    allowed_hosts => $allowed_hosts,
+  }
+
+
 }
