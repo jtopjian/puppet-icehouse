@@ -74,4 +74,20 @@ class icehouse::profiles::controller::keystone {
     tag          => $region,
   }
 
+  cubbystack::functions::create_keystone_endpoint { "${region}/orchestration":
+    public_url   => "http://${external_address}:8004/v1/%(tenant_id)s",
+    admin_url    => "http://${external_address}:8004/v1/%(tenant_id)s",
+    internal_url => "http://${internal_address}:8004/v1/%(tenant_id)s",
+    service_name => 'OpenStack Orchestration Service',
+    tag          => $region,
+  }
+
+  cubbystack::functions::create_keystone_endpoint { "${region}/cloudformation":
+    public_url   => "http://${external_address}:8000/v1/",
+    admin_url    => "http://${external_address}:8000/v1/",
+    internal_url => "http://${internal_address}:8000/v1/",
+    service_name => 'OpenStack Cloudformation Service',
+    tag          => $region,
+  }
+
 }

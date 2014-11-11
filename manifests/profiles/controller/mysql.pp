@@ -53,4 +53,10 @@ class icehouse::profiles::controller::mysql {
     allowed_hosts => $allowed_hosts,
   }
 
+  cubbystack::functions::create_mysql_db { 'heat':
+    user          => 'heat',
+    password      => hiera('openstack::heat::mysql::password'),
+    allowed_hosts => $allowed_hosts,
+  }
+
 }

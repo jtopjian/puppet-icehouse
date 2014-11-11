@@ -9,6 +9,7 @@ class icehouse::roles::controller {
   class { 'icehouse::profiles::controller::nova': } ->
   class { 'icehouse::profiles::controller::cinder': } ->
   class { 'icehouse::profiles::controller::neutron': } ->
+  class { 'icehouse::profiles::controller::heat': } ->
   class { 'icehouse::profiles::controller::horizon': }
 
 }
