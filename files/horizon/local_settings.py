@@ -487,3 +487,6 @@ FLAVOR_EXTRA_KEYS = {
         ('quota:outbound_average', _('Quota: Outbound average')),
     ]
 }
+
+LOGIN_URL='/auth/login/'
+LOGIN_REDIRECT_URL='/'
