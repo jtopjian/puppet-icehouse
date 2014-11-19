@@ -19,9 +19,9 @@ class icehouse::profiles::controller::keystone {
   }
 
   cubbystack::functions::create_keystone_endpoint { "${region}/identity":
-    public_url   => "http://${external_address}:5000/v2.0",
-    admin_url    => "http://${external_address}:35357/v2.0",
-    internal_url => "http://${internal_address}:5000/v2.0",
+    public_url   => "http://${external_address}:5000/v3",
+    admin_url    => "http://${external_address}:35357/v3",
+    internal_url => "http://${internal_address}:5000/v3",
     service_name => 'OpenStack Identity Service',
     tag          => $region,
   }

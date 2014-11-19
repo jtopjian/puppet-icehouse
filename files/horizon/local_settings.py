@@ -31,10 +31,10 @@ TEMPLATE_DEBUG = DEBUG
 # NOTE: The version should be formatted as it appears in the URL for the
 # service API. For example, The identity service APIs have inconsistent
 # use of the decimal point, so valid options would be "2.0" or "3".
-# OPENSTACK_API_VERSIONS = {
-#     "identity": 3,
-#     "volume": 2
-# }
+OPENSTACK_API_VERSIONS = {
+     "identity": 3,
+     "volume": 2
+}
 
 # Set this to True if running on multi-domain model. When this is enabled, it
 # will require user to enter the Domain name in addition to username for login.
@@ -126,7 +126,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # ]
 
 OPENSTACK_HOST = "127.0.0.1"
-OPENSTACK_KEYSTONE_URL = "http://%s:5000/v2.0" % OPENSTACK_HOST
+OPENSTACK_KEYSTONE_URL = "http://%s:5000/v3" % OPENSTACK_HOST
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = "_member_"
 
 # Disable SSL certificate checks (useful for self-signed certificates):
@@ -490,3 +490,4 @@ FLAVOR_EXTRA_KEYS = {
 
 LOGIN_URL='/auth/login/'
 LOGIN_REDIRECT_URL='/'
+COMPRESS_OFFLINE=True
