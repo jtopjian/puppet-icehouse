@@ -20,10 +20,11 @@ class icehouse::profiles::controller::nova {
 
   ## Generate an openrc file
   cubbystack::functions::create_openrc { '/root/openrc':
-    keystone_host  => hiera('openstack::cloud_controller'),
-    admin_password => hiera('openstack::keystone::admin::password'),
-    admin_tenant   => 'admin',
-    region         => hiera('openstack::region'),
+    keystone_host        => hiera('openstack::cloud_controller'),
+    keystone_api_version => 'v3',
+    admin_password       => hiera('openstack::keystone::admin::password'),
+    admin_tenant         => 'admin',
+    region               => hiera('openstack::region'),
   }
 
 }
