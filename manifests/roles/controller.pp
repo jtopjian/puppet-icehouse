@@ -1,5 +1,8 @@
 class icehouse::roles::controller {
 
+  class { 'cubbystack::repo':
+    release => 'icehouse',
+  } ->
   class { 'icehouse::profiles::common::users': } ->
   class { 'icehouse::profiles::common::memcached': } ->
   class { 'icehouse::profiles::common::utils': } ->

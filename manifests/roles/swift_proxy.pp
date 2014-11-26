@@ -3,6 +3,9 @@ class icehouse::roles::swift_proxy {
   anchor { 'icehouse::roles::swift_proxy': }
   Class { require => Anchor['icehouse::roles::swift_proxy'] }
 
+  class { 'cubbystack::repo':
+    release => 'icehouse',
+  } ->
   class { 'icehouse::profiles::common::users': }
   class { 'icehouse::profiles::common::memcached': }
   class { 'cubbystack::swift':

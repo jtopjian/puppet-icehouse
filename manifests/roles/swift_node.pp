@@ -25,6 +25,9 @@ class icehouse::roles::swift_node {
     require    => [File['/srv/node'], Package['xfsprogs']],
   }
 
+  class { 'cubbystack::repo':
+    release => 'icehouse',
+  } ->
   class { 'icehouse::profiles::common::users': }
   class { 'cubbystack::swift':
     settings => hiera('openstack::swift::settings'),
