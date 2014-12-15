@@ -7,8 +7,11 @@ class icehouse::profiles::controller::horizon {
     before  => Anchor['icehouse::profiles::controller::horizon::end']
   }
 
+  # Hiera
+  $config_file = hiera('openstack::horizon::config_file', 'puppet:///modules/icehouse/profiles/horizon/local_settings.py')
+
   class { 'cubbystack::horizon':
-    config_file => 'puppet:///modules/icehouse/horizon/local_settings.py'
+    config_file => $config_file,
   }
 
   file_line { 'horizon root url':

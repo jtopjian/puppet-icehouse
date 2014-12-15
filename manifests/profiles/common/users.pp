@@ -1,6 +1,7 @@
 class icehouse::profiles::common::users {
 
-  $users = hiera('openstack::users')
+  # Hiera
+  $users = hiera('openstack::users', {})
 
   $users.each |$user, $data| {
     cubbystack::functions::create_system_user { $user:

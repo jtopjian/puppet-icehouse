@@ -7,15 +7,20 @@ class icehouse::profiles::controller::glance {
     before  => Anchor['icehouse::profiles::controller::glance::end'],
   }
 
+  # Hiera
+  $api_settings      = hiera('openstack::glance::api::settings')
+  $registry_settings = hiera('openstack::glance::registry::settings')
+  $cache_settings    = hiera('openstack::glance::cache::settings')
+
   class { 'cubbystack::glance': }
   class { 'cubbystack::glance::api':
-    settings => hiera('openstack::glance::api::settings'),
+    settings => $api_settings,
   }
   class { 'cubbystack::glance::registry':
-    settings => hiera('openstack::glance::registry::settings'),
+    settings => $registry_settings,
   }
   class { 'cubbystack::glance::cache':
-    settings => hiera('openstack::glance::cache::settings'),
+    settings => $cache_settings,
   }
   class { 'cubbystack::glance::db_sync': }
 

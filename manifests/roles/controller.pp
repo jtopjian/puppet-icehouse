@@ -1,3 +1,5 @@
+# Note that you will need to set up MySQL and RabbitMQ
+# oustide of this module
 class icehouse::roles::controller {
 
   class { 'icehouse::profiles::common::users': } ->

@@ -7,63 +7,66 @@ class icehouse::profiles::controller::mysql {
     before  => Anchor['icehouse::profiles::controller::mysql::end']
   }
 
-  $allowed_hosts = hiera('openstack::mysql::allowed_hosts')
-
-  class { 'mysql::server':
-    root_password           => hiera('openstack::mysql::root_password'),
-    remove_default_accounts => true,
-    restart                 => true,
-    override_options        => {
-      'mysqld' => {
-        'bind_address' => '0.0.0.0',
-      }
-    },
-  }
+  # Hiera
+  $allowed_hosts      = hiera('openstack::mysql::allowed_hosts')
+  $keystone_password  = hiera('openstack::keystone::mysql::password')
+  $glance_password    = hiera('openstack::glance::mysql::password')
+  $nova_password      = hiera('openstack::nova::mysql::password')
+  $cinder_password    = hiera('openstack::cinder::mysql::password')
+  $neutron_password   = hiera('openstack::neutron::mysql::password')
+  $heat_password      = hiera('openstack::heat::mysql::password')
+  $trove_password     = hiera('openstack::trove::mysql::password')
+  $stacktach_password = hiera('openstack::stacktach::mysql::password')
 
   include mysql::bindings
   include mysql::bindings::python
 
   cubbystack::functions::create_mysql_db { 'keystone':
     user          => 'keystone',
-    password      => hiera('openstack::keystone::mysql::password'),
+    password      => $keystone_password,
     allowed_hosts => $allowed_hosts,
   }
 
   cubbystack::functions::create_mysql_db { 'glance':
     user          => 'glance',
-    password      => hiera('openstack::glance::mysql::password'),
+    password      => $glance_password,
     allowed_hosts => $allowed_hosts,
   }
 
   cubbystack::functions::create_mysql_db { 'cinder':
     user          => 'cinder',
-    password      => hiera('openstack::cinder::mysql::password'),
+    password      => $cinder_password,
     allowed_hosts => $allowed_hosts,
   }
 
   cubbystack::functions::create_mysql_db { 'nova':
     user          => 'nova',
-    password      => hiera('openstack::nova::mysql::password'),
+    password      => $nova_password,
     allowed_hosts => $allowed_hosts,
   }
 
   cubbystack::functions::create_mysql_db { 'neutron':
     user          => 'neutron',
-    password      => hiera('openstack::neutron::mysql::password'),
+    password      => $neutron_password,
     allowed_hosts => $allowed_hosts,
   }
 
   cubbystack::functions::create_mysql_db { 'heat':
     user          => 'heat',
-    password      => hiera('openstack::heat::mysql::password'),
+    password      => $heat_password,
     allowed_hosts => $allowed_hosts,
   }
 
   cubbystack::functions::create_mysql_db { 'trove':
     user          => 'trove',
-    password      => hiera('openstack::trove::mysql::password'),
+    password      => $trove_password,
     allowed_hosts => $allowed_hosts,
   }
 
+  cubbystack::functions::create_mysql_db { 'stacktach':
+    user          => 'stacktach',
+    password      => $stacktach_password,
+    allowed_hosts => $allowed_hosts,
+  }
 
 }

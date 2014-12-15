@@ -7,8 +7,11 @@ class icehouse::profiles::controller::heat {
     before  => Anchor['icehouse::profiles::controller::heat::end']
   }
 
+  # Hiera
+  $settings = hiera('openstack::heat::settings')
+
   class { 'cubbystack::heat':
-    settings => hiera('openstack::heat::settings'),
+    settings => $settings,
   }
   class { 'cubbystack::heat::api': }
   class { 'cubbystack::heat::api_cfn': }

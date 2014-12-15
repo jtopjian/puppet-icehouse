@@ -7,8 +7,11 @@ class icehouse::profiles::controller::cinder {
     before  => Anchor['icehouse::profiles::controller::cinder::end'],
   }
 
+  # Hiera
+  $settings = hiera('openstack::cinder::settings')
+
   class { 'cubbystack::cinder':
-    settings => hiera('openstack::cinder::settings'),
+    settings => $settings,
   }
   class { 'cubbystack::cinder::api': }
   class { 'cubbystack::cinder::scheduler': }

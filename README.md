@@ -1,5 +1,5 @@
 Icehouse Reference Module
-=======================
+=========================
 
 This module is a reference implementation for the [cubbystack](https://github.com/jtopjian/puppet-cubbystack) OpenStack Module.
 
@@ -72,6 +72,6 @@ This module is a reference module. Its purpose is to show you can use [cubbystac
 
 Due to Neutron, you *must* hard-code the `services` project/tenant ID. See the `openstack::nova::keystone::tenant_id` setting in the Hiera file.
 
-## Credits
+This module breaks some best practices by doing the whole roles/profiles thing *in* the module. If you want to conform to best practices, copy the contents of `manifests/*` to your local `site` or `admin` module *or* copy `manifests/profiles/*` to your `profiles` module and `manifests/roles/*` to your `roles` module. Or just leave it as-is.
 
-This module is based off of Chris Hoges's excellent [Puppet work](https://github.com/hogepodge/puppetlabs-havana).
+Remember, this is a *reference* module. Its purpose is to get you started. Modify as needed.

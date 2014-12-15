@@ -7,8 +7,11 @@ class icehouse::profiles::controller::nova {
     before  => Anchor['icehouse::profiles::controller::nova::end']
   }
 
+  # Hiera
+  $settings = hiera('openstack::nova::settings')
+
   class { 'cubbystack::nova':
-    settings => hiera('openstack::nova::settings'),
+    settings => $settings,
   }
   class { 'cubbystack::nova::api': }
   class { 'cubbystack::nova::cert': }

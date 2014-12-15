@@ -7,8 +7,11 @@ class icehouse::profiles::common::memcached {
     before  => Anchor['icehouse::profiles::common::memcached::end'],
   }
 
+  # Hiera
+  $listen_ip = hiera('memcached::listen_ip', '127.0.0.1')
+
   class { '::memcached':
-    listen_ip => '127.0.0.1',
+    listen_ip => $listen_ip,
   }
 
   case $::operatingsystem {

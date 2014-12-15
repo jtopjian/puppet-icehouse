@@ -189,6 +189,10 @@ openstack::nova::settings:
   'DEFAULT/novncproxy_host': '::'
   'DEFAULT/instance_usage_audit_period': 'hour'
   'DEFAULT/instance_usage_audit': true
+  'DEFAULT/notification_driver': 'nova.openstack.common.notifier.rpc_notifier'
+  'DEFAULT/notification_topics': 'notifications,stacktach'
+  'DEFAULT/notify_on_state_change': 'vm_and_task_state'
+  'DEFAULT/notify_on_any_change': true
   'DEFAULT/service_neutron_metadata_proxy': true
   'DEFAULT/neutron_metadata_proxy_shared_secret': 'password'
   'DEFAULT/network_api_class': 'nova.network.neutronv2.api.API'
@@ -265,18 +269,18 @@ openstack::neutron::metadata::settings:
 openstack::neutron::plugins::ml2::settings:
   'ml2/type_drivers': 'vxlan'
   'ml2/mechanism_drivers': 'linuxbridge'
-  #'ml2/mechanism_drivers': 'openvswitch'
   'ml2/tenant_network_types': 'vxlan'
   'ml2_type_vxlan/vni_ranges': '1000:1050'
   'securitygroup/firewall_driver': 'neutron.agent.linux.iptables_firewall.IptablesFirewallDriver'
-  #'securitygroup/firewall_driver': 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
   'vxlan/enable_vxlan': True
   'vxlan/l2_population': False
+  'agent/veth_mtu': 1490
+  #'ml2/mechanism_drivers': 'openvswitch'
+  #'securitygroup/firewall_driver': 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
   #'ovs/tunnel_type': 'vxlan'
   #'ovs/tenant_network_type': 'vxlan'
   #'ovs/tunnel_id_ranges': '1000:1050'
   #'ovs/enable_tunneling': True
-  'agent/veth_mtu': 1490
   #'agent/tunnel_types': 'vxlan'
   #'agent/l2_population': False
 

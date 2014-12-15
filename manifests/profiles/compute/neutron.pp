@@ -7,7 +7,9 @@ class icehouse::profiles::compute::neutron {
     before  => Anchor['icehouse::profiles::compute::neutron::end'],
   }
 
-  # Get the internal IP of the compute node
+  # Hiera
+  $settings         = hiera('openstack::neutron::settings')
+  $ml2_settings     = hiera('openstack::neutron::plugins::ml2::settings')
   $internal_address = hiera('network::internal::ip')
 
   # Determine the internal address for vxlan
@@ -16,15 +18,14 @@ class icehouse::profiles::compute::neutron {
   }
 
   # merge the two settings
-  $ml2_settings = hiera('openstack::neutron::plugins::ml2::settings')
   $ml2_merged = merge($ml2_settings, $vxlan)
 
-  class {
-    'cubbystack::neutron':
-      settings => hiera('openstack::neutron::settings');
-    'cubbystack::neutron::plugins::ml2':
-      settings => $ml2_merged;
-    'cubbystack::neutron::plugins::linuxbridge':;
+  class { 'cubbystack::neutron':
+    settings => $settings
   }
+  class { 'cubbystack::neutron::plugins::ml2':
+    settings => $ml2_merged
+  }
+  class { 'cubbystack::neutron::plugins::linuxbridge': }
 
 }

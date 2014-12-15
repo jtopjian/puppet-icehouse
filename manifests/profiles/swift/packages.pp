@@ -1,4 +1,4 @@
-class icehouse::openstack::swift::packages {
+class icehouse::profiles::swift::packages {
 
   $packages = ['swift-plugin-s3', 'python-keystone', 'python-keystoneclient']
 

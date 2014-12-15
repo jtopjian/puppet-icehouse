@@ -7,23 +7,27 @@ class icehouse::profiles::controller::trove {
     before  => Anchor['icehouse::profiles::controller::trove::end']
   }
 
-  # For the cloudinit template
-  $cloud_controller = hiera('network::internal::ip')
-  $rabbit_password  = hiera('openstack::rabbitmq::password')
-  $nova_password    = hiera('openstack::nova::keystone::password')
+  # Hiera
+  $cloud_controller     = hiera('network::internal::ip')
+  $rabbit_password      = hiera('openstack::rabbitmq::password')
+  $nova_password        = hiera('openstack::nova::keystone::password')
+  $settings             = hiera('openstack::trove::settings')
+  $taskmanager_settings = hiera('openstack::trove::taskmanager::settings')
+  $conductor_settings   = hiera('openstack::trove::conductor::settings')
+  $api_paste_settings   = hiera('openstack::trove::api_paste::settings')
 
   class { 'cubbystack::trove':
-    settings => hiera('openstack::trove::settings'),
+    settings => $settings,
   }
   class { 'cubbystack::trove::api': }
   class { 'cubbystack::trove::taskmanager':
-    settings => hiera('openstack::trove::taskmanager::settings'),
+    settings => $taskmanager_settings,
   }
   class { 'cubbystack::trove::conductor':
-    settings => hiera('openstack::trove::conductor::settings'),
+    settings => $conductor_settings,
   }
   class { 'cubbystack::trove::api_paste':
-    settings => hiera('openstack::trove::api_paste::settings'),
+    settings => $api_paste_settings,
   }
   class { 'cubbystack::trove::db_sync': }
 
@@ -32,7 +36,7 @@ class icehouse::profiles::controller::trove {
     owner  => 'root',
     group  => 'root',
     mode   => '0640',
-    source => 'puppet:///modules/icehouse/trove/trove-conductor.conf',
+    source => 'puppet:///modules/icehouse/profiles/trove/trove-conductor.conf',
     before => Class['cubbystack::trove::conductor'],
   }
 
@@ -41,7 +45,7 @@ class icehouse::profiles::controller::trove {
     owner   => 'trove',
     group   => 'trove',
     mode    => '0640',
-    content => template('icehouse/trove/mysql.cloudinit.erb'),
+    content => template('icehouse/profiles/trove/mysql.cloudinit.erb'),
     require => Class['cubbystack::trove'],
   }
 
@@ -51,7 +55,7 @@ class icehouse::profiles::controller::trove {
     group   => 'trove',
     mode    => '0640',
     replace => false,
-    source  => 'puppet:///modules/icehouse/trove/api-paste.ini',
+    source  => 'puppet:///modules/site/profiles/openstack/trove/api-paste.ini',
     require => Class['cubbystack::trove'],
     before  => Class['cubbystack::trove::api_paste'],
   }

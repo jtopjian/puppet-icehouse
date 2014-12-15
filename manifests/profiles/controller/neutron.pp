@@ -7,42 +7,45 @@ class icehouse::profiles::controller::neutron {
     before  => Anchor['icehouse::profiles::controller::neutron::end']
   }
 
-  # Get the Internal IP of the controller
-  $internal_address = hiera('network::internal::ip')
+  # Hiera
+  $server_settings   = hiera('openstack::neutron::settings')
+  $dhcp_settings     = hiera('openstack::neutron::dhcp::settings')
+  $l3_settings       = hiera('openstack::neutron::l3::settings')
+  $metadata_settings = hiera('openstack::neutron::metadata::settings')
+  $ml2_settings      = hiera('openstack::neutron::plugins::ml2::settings')
+  $local_ip          = hiera('network::internal::ip', $::ipaddress_eth0)
 
   # Determine the internal address for vxlan
   $vxlan = {
-    'vxlan/local_ip' => $internal_address,
+    'vxlan/local_ip' => $local_ip,
   }
 
   # merge the two settings
-  $ml2_settings = hiera('openstack::neutron::plugins::ml2::settings')
   $ml2_merged = merge($ml2_settings, $vxlan)
 
-  class {
-    'cubbystack::neutron':
-      settings => hiera('openstack::neutron::settings');
-    'cubbystack::neutron::dhcp':
-      settings => hiera('openstack::neutron::dhcp::settings');
-    'cubbystack::neutron::l3':
-      settings => hiera('openstack::neutron::l3::settings');
-    'cubbystack::neutron::metadata':
-      settings => hiera('openstack::neutron::metadata::settings');
-    'cubbystack::neutron::plugins::ml2':
-      settings => $ml2_merged;
-    'cubbystack::neutron::plugins::linuxbridge':;
-    'cubbystack::neutron::server':;
+  class {'cubbystack::neutron':
+      settings => $server_settings,
   }
+  class { 'cubbystack::neutron::dhcp':
+      settings => $dhcp_settings,
+  }
+  class { 'cubbystack::neutron::l3':
+      settings => $l3_settings,
+  }
+  class { 'cubbystack::neutron::metadata':
+      settings => $metadata_settings,
+  }
+  class { 'cubbystack::neutron::plugins::ml2':
+      settings => $ml2_merged,
+  }
+  class { 'cubbystack::neutron::plugins::linuxbridge': }
+  class { 'cubbystack::neutron::server': }
 
-  case $::lsbdistid {
-    'Ubuntu': {
-      file_line { '/etc/default/neutron-server NEUTRON_PLUGIN_CONFIG':
-        path    => '/etc/default/neutron-server',
-        line    => 'NEUTRON_PLUGIN_CONFIG="/etc/neutron/plugins/ml2/ml2_conf.ini"',
-        match   => '^NEUTRON_PLUGIN_CONFIG',
-        require => Class['cubbystack::neutron::plugins::ml2'],
-      }
-    }
+  file_line { '/etc/default/neutron-server NEUTRON_PLUGIN_CONFIG':
+    path    => '/etc/default/neutron-server',
+    line    => 'NEUTRON_PLUGIN_CONFIG="/etc/neutron/plugins/ml2/ml2_conf.ini"',
+    match   => '^NEUTRON_PLUGIN_CONFIG',
+    require => Class['cubbystack::neutron::plugins::ml2'],
   }
 
 }
